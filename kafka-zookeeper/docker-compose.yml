@@ -1,0 +1,29 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    hostname: zk
+    ports:
+      - "2181:2181"
+    networks:
+      kf0:
+        aliases:
+          - zk
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+    - "9092:9092"
+    - "9999:9999"
+    hostname: kafka
+    environment:
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ADVERTISED_HOST_NAME: "kafka"
+      KAFKA_ADVERTISED_PORT: "9092"
+      KAFKA_ZOOKEEPER_CONNECT: "zk:2181"
+    networks:
+      kf0:
+        aliases:
+          - kafka
+networks:
+  kf0:
+    external: true
